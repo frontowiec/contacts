@@ -1,5 +1,6 @@
 import * as angular from 'angular';
 import * as ngMaterial from 'angular-material';
+import * as immutable from 'angular-immutable';
 import ngRedux from 'ng-redux';
 import thunk from 'redux-thunk';
 
@@ -11,7 +12,7 @@ import './index.css';
 export const app: string = 'app';
 
 angular
-  .module(app, [ngMaterial, ngRedux])
+  .module(app, [ngMaterial, ngRedux, immutable])
   .config(($ngReduxProvider) => {
     $ngReduxProvider.createStoreWith(reducer, [thunk], [window['__REDUX_DEVTOOLS_EXTENSION__']()]);
   })

@@ -8,10 +8,7 @@ class ContactsComponentController implements IOnInit, IOnDestroy {
   fetchContacts: Function;
 
   constructor(private $ngRedux: INgRedux) {
-    this.unsubscribe = $ngRedux.connect(state => {
-      console.log(state.contacts);
-      return {contacts: state.contacts.toJS()};
-    }, {fetchContacts})(this);
+    this.unsubscribe = $ngRedux.connect(state => ({contacts: state.contacts}), {fetchContacts})(this);
   }
 
   $onInit(): void {
@@ -27,7 +24,7 @@ export const hello: angular.IComponentOptions = {
   template: `
     <md-content>
       <md-list flex>
-        <md-list-item class="md-3-line" ng-repeat="contact in $ctrl.contacts" ng-click="null">
+        <md-list-item immutable="$ctrl.contacts" class="md-3-line" ng-repeat="contact in $ctrl.contacts" ng-click="null">
           <img ng-src="{{contact.avatar}}" class="md-avatar" alt="{{concat.name}}" />
            <div class="md-list-item-text" layout="column">
             <h3>{{ contact.name }}</h3>
