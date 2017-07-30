@@ -12,7 +12,10 @@ class ContactsComponentController implements IOnInit, IOnDestroy {
   findDebounce: Function;
 
   constructor(private $ngRedux: INgRedux) {
-    this.unsubscribe = $ngRedux.connect(state => ({contacts: state.contacts}), {fetchContacts, findContacts})(this);
+    this.unsubscribe = $ngRedux.connect(state => ({contacts: state.contacts.get('current')}), {
+      fetchContacts,
+      findContacts
+    })(this);
   }
 
   $onInit(): void {

@@ -3,7 +3,7 @@
  * email: marcinsirocki@gmail.com
  */
 import {data} from '../mock-data/data';
-import {List} from 'immutable';
+import {List, Map} from 'immutable';
 import {includes} from 'lodash';
 
 export type Contact = {
@@ -16,7 +16,7 @@ export type Contact = {
 const LOAD_ALL_CONTACTS = 'LOAD_ALL_CONTACTS';
 const FIND_CONTACTS = 'FIND_CONTACTS';
 
-const initialState: List<Contact> = List([]);
+const initialState: Map<string, List<Contact>> = Map({default: List([]), current: List([])});
 
 const loadAllContacts = (contacts: List<Contact>) => ({
   type: LOAD_ALL_CONTACTS,
@@ -34,23 +34,23 @@ export const findContacts = (term: string) => ({
   payload: term
 });
 
-export default function reducer(state = initialState, action): List<Contact> {
-  switch (action.type) {
-    case LOAD_ALL_CONTACTS:
-      return action.payload;
-    case FIND_CONTACTS:
-      return filterContacts(action.payload, state);
-    default:
-      return state;
-  }
-}
-
 const isContainTerm = (term: string, contact: Contact): boolean =>
 includes(contact.name.toLocaleLowerCase(), term.toLocaleLowerCase()) ||
 includes(contact.email.toLocaleLowerCase(), term.toLocaleLowerCase()) ||
 includes(contact.phone, term.toLocaleLowerCase());
 
 
-function filterContacts(term: string, contacts: List<Contact>): List<Contact> {
-  return contacts.filter(contact => isContainTerm(term, contact)).toList();
+const filterContacts = (term: string, contacts: List<Contact>): List<Contact> =>
+  contacts.filter(contact => isContainTerm(term, contact)).toList();
+
+export default function reducer(state = initialState, action): Map<string, List<Contact>> {
+  switch (action.type) {
+    case LOAD_ALL_CONTACTS:
+      return Map({default: action.payload, current: action.payload});
+    case FIND_CONTACTS:
+      const term = action.payload;
+      return state.set('current', filterContacts(term, state.get('default')));
+    default:
+      return state;
+  }
 }
