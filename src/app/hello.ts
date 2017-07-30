@@ -43,6 +43,7 @@ export const hello: angular.IComponentOptions = {
           <md-input-container md-no-float class="md-block">
             <input type="text" placeholder="search contacts ..." style="color: #fff" ng-change="$ctrl.find()" ng-model="$ctrl.inputValue">
           </md-input-container>
+          <h5>{{$ctrl.contacts.size}} contacts</h5>
         </div>
       </md-toolbar>
       <md-list flex>

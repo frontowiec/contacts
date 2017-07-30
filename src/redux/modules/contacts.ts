@@ -25,7 +25,7 @@ const loadAllContacts = (contacts: List<Contact>) => ({
 
 export const fetchContacts = () => dispatch => {
   setTimeout(() => {
-    dispatch(loadAllContacts(List(data(10))));
+    dispatch(loadAllContacts(List(data(1000))));
   }, 1500);
 };
 

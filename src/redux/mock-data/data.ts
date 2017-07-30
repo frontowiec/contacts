@@ -7,7 +7,7 @@ import {Contact} from '../modules/contacts';
 
 export const data = (n: number): Array<Contact> => {
   let contacts: Array<Contact> = [];
-  for (let i = 0; i <= n; i++) {
+  for (let i = 1; i <= n; i++) {
     contacts.push({
       name: `${faker.name.firstName()} ${faker.name.lastName()}`,
       avatar: faker.image.avatar(),
