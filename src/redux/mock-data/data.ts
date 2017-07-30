@@ -4,8 +4,9 @@
  */
 import * as faker from 'faker';
 import {Contact} from '../modules/contacts';
+import {List} from 'immutable';
 
-export const data = (n: number): Array<Contact> => {
+export const data = (n: number): List<Contact> => {
   let contacts: Array<Contact> = [];
   for (let i = 0; i <= n; i++) {
     contacts.push({
@@ -16,5 +17,5 @@ export const data = (n: number): Array<Contact> => {
     });
   }
 
-  return contacts;
+  return List(contacts);
 };

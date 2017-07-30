@@ -3,6 +3,7 @@
  * email: marcinsirocki@gmail.com
  */
 import {data} from '../mock-data/data';
+import {List} from 'immutable';
 
 export type Contact = {
   name: string;
@@ -13,22 +14,20 @@ export type Contact = {
 
 const LOAD_ALL_CONTACTS = 'LOAD_ALL_CONTACTS';
 
-const initialState: Array<Contact> = [];
+const initialState: List<Contact> = List([]);
 
-const loadAllContacts = (contacts: Array<Contact>) => ({
+const loadAllContacts = (contacts: List<Contact>) => ({
   type: LOAD_ALL_CONTACTS,
   payload: contacts
 });
 
-export function fetchContacts() {
-  return dispatch => {
-    setTimeout(() => {
-      dispatch(loadAllContacts(data(10)));
-    }, 1500);
-  };
-}
+export const fetchContacts = () => dispatch => {
+  setTimeout(() => {
+    dispatch(loadAllContacts(data(10)));
+  }, 1500);
+};
 
-export default function reducer(state = initialState, action): Array<Contact> {
+export default function reducer(state = initialState, action): List<Contact> {
   switch (action.type) {
     case LOAD_ALL_CONTACTS:
       return action.payload;
