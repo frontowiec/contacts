@@ -5,7 +5,7 @@
     "experimentalDecorators": true,
     "removeComments": false,
     "noImplicitAny": false,
-    "typeRoots": ["node_modules/@types/"],
+    "typeRoots": ["node_modules/@types/", "./typings/index.d.ts"],
     "types": [
       "angular",
       "angular-mocks",

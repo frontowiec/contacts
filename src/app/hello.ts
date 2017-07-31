@@ -23,7 +23,7 @@ class ContactsComponentController implements IOnInit, IOnDestroy {
 
     this.findDebounce = debounce(() => {
       this.findContacts(this.inputValue);
-    }, 500);
+    }, 350);
   }
 
   $onDestroy(): void {
@@ -43,11 +43,11 @@ export const hello: angular.IComponentOptions = {
           <md-input-container md-no-float class="md-block">
             <input type="text" placeholder="search contacts ..." style="color: #fff" ng-change="$ctrl.find()" ng-model="$ctrl.inputValue">
           </md-input-container>
-          <h5>{{$ctrl.contacts.size}} contacts</h5>
+          <h5>{{ $ctrl.contacts.size }} contacts</h5>
         </div>
       </md-toolbar>
       <md-list flex>
-        <md-list-item immutable="$ctrl.contacts" class="md-3-line" ng-repeat="contact in $ctrl.contacts" ng-click="null">
+        <md-list-item immutable="$ctrl.contacts" class="md-3-line" sly-repeat="contact in $ctrl.contacts" ng-click="null">
           <img ng-src="{{contact.avatar}}" class="md-avatar" alt="{{concat.name}}" />
            <div class="md-list-item-text" layout="column">
             <h3>{{ contact.name }}</h3>

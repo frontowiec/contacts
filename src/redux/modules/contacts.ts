@@ -5,6 +5,9 @@
 import {data} from '../mock-data/data';
 import {List, Map} from 'immutable';
 import {includes} from 'lodash';
+import * as MyWorker from 'worker-loader!./filterContacts';
+
+export const contactsWorker: Worker = new MyWorker();
 
 export type Contact = {
   name: string;
@@ -15,8 +18,14 @@ export type Contact = {
 
 const LOAD_ALL_CONTACTS = 'LOAD_ALL_CONTACTS';
 const FIND_CONTACTS = 'FIND_CONTACTS';
+export const START_COMPUTING = 'START_COMPUTING';
+const FINISH_COMPUTING = 'FINISH_COMPUTING';
 
-const initialState: Map<string, List<Contact>> = Map({default: List([]), current: List([])});
+const initialState: Map<string, List<Contact> | boolean> = Map({
+  default: List([]),
+  current: List([]),
+  isComputing: false
+});
 
 const loadAllContacts = (contacts: List<Contact>) => ({
   type: LOAD_ALL_CONTACTS,
@@ -29,27 +38,29 @@ export const fetchContacts = () => dispatch => {
   }, 1500);
 };
 
-export const findContacts = (term: string) => ({
-  type: FIND_CONTACTS,
-  payload: term
+export const startComputing = (term: string) => ({
+  type: START_COMPUTING,
+  payload: true,
+  term
 });
 
-const isContainTerm = (term: string, contact: Contact): boolean =>
-includes(contact.name.toLocaleLowerCase(), term.toLocaleLowerCase()) ||
-includes(contact.email.toLocaleLowerCase(), term.toLocaleLowerCase()) ||
-includes(contact.phone, term.toLocaleLowerCase());
+export const finishComputing = (data) => ({
+  type: FINISH_COMPUTING,
+  payload: false,
+  data
+});
 
+export const findContacts = (term: string) => dispatch =>
+  dispatch(startComputing(term));
 
-const filterContacts = (term: string, contacts: List<Contact>): List<Contact> =>
-  contacts.filter(contact => isContainTerm(term, contact)).toList();
-
-export default function reducer(state = initialState, action): Map<string, List<Contact>> {
+export default function reducer(state = initialState, action): Map<string, List<Contact> | boolean> {
   switch (action.type) {
     case LOAD_ALL_CONTACTS:
-      return Map({default: action.payload, current: action.payload});
-    case FIND_CONTACTS:
-      const term = action.payload;
-      return state.set('current', filterContacts(term, state.get('default')));
+      return Map({default: action.payload, current: action.payload, isComputing: false});
+    case START_COMPUTING:
+      return state.set('isComputing', true);
+    case FINISH_COMPUTING:
+      return state.set('isComputing', false).set('current', List(action.data));
     default:
       return state;
   }
